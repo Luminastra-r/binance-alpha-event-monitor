@@ -227,3 +227,34 @@ Result: PASS
 - **wallet 频道本阶段在线重抓**：平台抓取工具限流（`link fetch error`）；Phase 1 官方原文 fixture 完成同源验证，生产直连不受影响。
 - **Docker 实际构建/运行**：沙箱无 docker CLI、无 root（apt 失败）→ 以"产物级 PASS + 容器内等价运行验证（fixture 全流程）"替代，构建需在服务器执行。
 - **真实微信投递**：无 PushPlus Token → BLOCKED_BY_MISSING_TOKEN（dry-run 正常）。
+
+# Phase 3 — 飞书 Bot Webhook 通知渠道（追加）
+
+## 1. 实际修改了什么（增量）
+
+- 新增 `app/notifiers/feishu.py`：`FeishuBotWebhookProvider`（官方自定义机器人 webhook，`msg_type=text`，UTF-8 ≤4000 字节安全截断，3 次重试 0s/30s/120s）。
+- 改造 `app/notifiers/base.py`：新增 `FanoutProvider` 多渠道扇出；`get_provider()` 组装所有启用渠道（PushPlus + 飞书），任一渠道成功即成功、全失败才 FAILED；无渠道配置时 dry-run 兜底。
+- `app/config.py`：新增 `FEISHU_ENABLED` / `FEISHU_WEBHOOK_URL` / `FEISHU_RETRY_DELAYS` / `FEISHU_TIMEOUT`；`feishu_ready` 校验 webhook 必须为官方 `open-apis/bot/v2/hook/` 前缀。
+- `app/cli.py` / `app/selftests.py`：新增 `python -m app test-feishu`（URL 校验 / payload 构造 / UTF-8 截断扫描 / Fanout 扇出 / provider 选择）。
+- 本地 `.env.example` 增加飞书配置段（该文件不随 GitHub 发布）。
+
+## 2. 实际测试了什么（沙箱执行，全部 PASS）
+
+| 命令 | 结果 |
+|---|---|
+| `python -m app test-feishu` | 18/18 PASS（含 200 档字节边界截断扫描，无半字符） |
+| `python -m app test-alpha` | ALL PASS（DNA/DRV/反例未回归） |
+| `python -m app test-notification` | ALL PASS（双阶段/去重/重启恢复未回归） |
+| `python -m app test-cross-source` | ALL PASS（跨信源合并/去重未回归） |
+
+## 3. 验收结论（Phase 3）
+
+- Development = PASS ｜ Keyword Matching / Event Dedup / Dynamic Polling / Reminder Persistence / Restart Recovery = PASS（回归未破坏）
+- PushPlus Integration = READY；Feishu Integration = READY（webhook 待用户配置 URL）
+- Actual WeChat Delivery = BLOCKED_BY_MISSING_TOKEN；Actual Feishu Delivery = BLOCKED_BY_MISSING_WEBHOOK_URL（dry-run 为正常状态）
+
+## 4. 部署后你需要手动做的（Phase 3 增量）
+
+1. 飞书群 → 设置 → 群机器人 → 添加自定义机器人，复制 webhook。
+2. `.env` 增加 `FEISHU_ENABLED=true` + `FEISHU_WEBHOOK_URL=https://open.feishu.cn/open-apis/bot/v2/hook/<token>`，重启进程。
+3. PushPlus 与飞书可同时启用；至少一个渠道就绪即退出 dry-run。

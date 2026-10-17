@@ -1,16 +1,16 @@
-# Binance Alpha Event Monitor (Phase 2 — official sources, multi-channel merge)
+# Binance Alpha Event Monitor (Phase 3 — official sources, multi-channel notifications)
 
-轻量级 Binance Alpha 空投预告自动监控 + 微信双阶段提醒。仅使用**官方信源**，跨渠道合并为统一事件，不重复骚扰。
+轻量级 Binance Alpha 空投预告自动监控 + 微信/飞书双阶段提醒。仅使用**官方信源**，跨渠道合并为统一事件，不重复骚扰。
 
 ```
 Binance Wallet 官方 Telegram (P0)  ┐
 Binance 官方英文公告 Telegram (P1) ┼─低频动态轮询─► 关键词规则过滤 ─► 统一 Alpha 事件 ─► SQLite
 Binance Square 官方账号 (适配器)   ┘                        │
                                  ┌─────────────────────────┴─────────────────────────┐
-                                 │ 发现消息 → 立即推送微信   │  T-10分钟 → 再次推送微信  │
+                                 │ 发现消息 → 立即推送       │  T-10分钟 → 再次推送      │
                                  └─────────────────────────┴─────────────────────────┘
                                                            │
-                                                         PushPlus ──► 微信
+                                       PushPlus ──► 微信  /  Feishu Bot ──► 飞书群
 ```
 
 - **v1/v2 边界**：不用 LLM、不用 Binance API Key、不自动领取、不自动交易、不保存登录信息、不用浏览器自动化。
@@ -64,6 +64,7 @@ docker compose logs -f --tail=100
 | `python -m app test-alpha` | 离线关键词/抽取/类型测试（DNA/DRV + 官方反例） |
 | `python -m app test-notification` | 双阶段提醒测试（30min/5min/已开始/改时间/重启恢复/去重） |
 | `python -m app test-cross-source` | 跨信源合并/去重回归（Phase 2 §7） |
+| `python -m app test-feishu` | 飞书 webhook 渠道测试（Phase 3） |
 | `python -m app test-source` | Telegram 解析器自测（含"结构变化必须报错"）+ 在线抓取检查 |
 | `python -m app replay [DNA\|DRV] [--sources ...]` | 真实信源历史验证（多信源、标注出处） |
 | `python -m app health` | 健康快照（`data/health.json`，每信源独立） |
@@ -93,8 +94,9 @@ app/
 │   ├── square.py        # Binance Square 适配器（blocked/attempt/fixture 三模式）
 │   └── stubs.py         # MTProto / ThirdParty（future，绝不进 allowlist）
 ├── notifiers/
-│   ├── base.py          # NotificationProvider 抽象（dry-run 模式）
-│   └── pushplus.py      # PushPlus 微信（3 次重试：0s/30s/120s）
+│   ├── base.py          # NotificationProvider 抽象 + FanoutProvider 多渠道扇出（dry-run 兜底）
+│   ├── pushplus.py      # PushPlus 微信（3 次重试：0s/30s/120s）
+│   └── feishu.py        # 飞书自定义机器人 webhook（Phase 3，同样 3 次重试）
 ├── notifications.py     # 通知去重（DISCOVERED/T-10/EVENT_UPDATED 每事件每类型最多一次）
 ├── reminders.py         # T-10 reminder 持久化（SQLite）
 ├── scheduler.py         # 独立调度线程（30s tick，重启恢复、错过不补发）
@@ -130,7 +132,11 @@ app/
 
 ---
 
-## 微信接入（PushPlus）
+## 通知渠道（PushPlus 微信 / 飞书 Bot）
+
+系统支持**多个通知渠道同时启用**，任一渠道投递成功即记为成功（全失败才 FAILED）。没有配置任何渠道时自动进入 dry-run。
+
+### PushPlus（微信）
 
 1. 到 [pushplus.plus](https://www.pushplus.plus) 注册，关注公众号获取 token。
 2. `.env` 中配置：
@@ -140,9 +146,23 @@ app/
    PUSHPLUS_TOKEN=你的token
    ```
 
-3. 重启容器/进程即可。未配置 token 时系统照常运行，日志输出 `[DRY-RUN] notification would be sent: ...`，状态标记 `DRY_RUN`（不冒充真实送达）。
+### 飞书自定义机器人（webhook）
 
-接口已抽象为 `NotificationProvider`，未来可加 WxPusher 等渠道，不改业务逻辑。
+1. 在飞书群 → 设置 → 群机器人 → 添加「自定义机器人」，复制 webhook 地址（`https://open.feishu.cn/open-apis/bot/v2/hook/<token>`）。
+2. `.env` 中配置：
+
+   ```
+   FEISHU_ENABLED=true
+   FEISHU_WEBHOOK_URL=https://open.feishu.cn/open-apis/bot/v2/hook/你的token
+   ```
+
+3. 正文使用飞书 text 消息（≤4000 UTF-8 字节自动安全截断），3 次重试（0s/30s/120s）。
+
+### dry-run 兜底
+
+未配置任何渠道（或 Token/URL 缺失）时系统照常运行，日志输出 `[DRY-RUN] notification would be sent: ...`，状态标记 `DRY_RUN`（不冒充真实送达）。
+
+渠道已抽象为 `NotificationProvider`，由 `get_provider()` 组装为 `FanoutProvider` 扇出；未来加 WxPusher 等渠道只需新增 Provider 并注册，不改业务逻辑。
 
 ---
 
