@@ -1,3 +1,0 @@
-# Zero third-party runtime dependencies: the whole monitor runs on the Python
-# standard library (urllib + sqlite3 + html.parser + zoneinfo).
-# Python 3.10+ required (3.11/3.12 recommended).
