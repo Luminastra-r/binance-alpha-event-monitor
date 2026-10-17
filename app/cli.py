@@ -5,6 +5,8 @@ Commands:
   python -m app test-source         parser self-test + live/fixture fetch check
   python -m app test-alpha          offline keyword + extraction tests (spec §30)
   python -m app test-notification   dual-stage reminder tests (spec §31)
+  python -m app test-cross-source   cross-source merge tests (Phase 2 §7)
+  python -m app test-feishu         Feishu webhook channel tests (Phase 3)
   python -m app replay [DNA|DRV]    real-source historical verification (spec §32)
   python -m app health              health snapshot (spec §34)
   python -m app version
@@ -207,6 +209,13 @@ def cmd_test_cross_source(args: argparse.Namespace = None) -> int:
     return run_cross_source_tests()
 
 
+def cmd_test_feishu(args: argparse.Namespace = None) -> int:
+    setup_logging()
+    from app.selftests import run_feishu_tests
+
+    return run_feishu_tests()
+
+
 def cmd_replay(args: argparse.Namespace) -> int:
     setup_logging()
     from app.verify import run_real_source_test
@@ -271,6 +280,10 @@ def main(argv: list[str] | None = None) -> int:
     p_cs = sub.add_parser("test-cross-source",
                           help="cross-source merge & notification tests (Phase 2)")
     p_cs.set_defaults(fn=cmd_test_cross_source)
+
+    p_fs = sub.add_parser("test-feishu",
+                          help="Feishu webhook channel tests (Phase 3)")
+    p_fs.set_defaults(fn=cmd_test_feishu)
 
     p_rp = sub.add_parser("replay", help="real-source historical verification")
     p_rp.add_argument("symbols", nargs="*", default=None, help="DNA / DRV (default: both)")
