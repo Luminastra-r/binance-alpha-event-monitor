@@ -2,8 +2,9 @@
 
   python -m app test-alpha          -> keyword matching table (DNA/DRV + negatives)
   python -m app test-notification   -> dual-stage reminder scenarios + restart recovery
+  python -m app test-feishu         -> Feishu webhook channel tests (Phase 3)
 
-Both exit non-zero if any assertion fails.
+All exit non-zero if any assertion fails.
 """
 
 import logging
@@ -653,6 +654,108 @@ def run_cross_source_tests() -> int:
     sched._check_due()
     check("START_MINUS_10_MINUTES sent once", count_notif(db7, "START_MINUS_10_MINUTES") == 1,
           f"count={count_notif(db7, 'START_MINUS_10_MINUTES')}")
+
+    print(f"\nRESULT: {'ALL PASS' if failures == 0 else f'{failures} FAILURE(S)'}")
+    return 0 if failures == 0 else 1
+
+
+# ==========================================================================
+# Phase 3: Feishu (Lark) custom-bot webhook channel tests
+# ==========================================================================
+
+def run_feishu_tests() -> int:
+    from app.notifiers import base as nb
+    from app.notifiers.feishu import (
+        FEISHU_WEBHOOK_PREFIX,
+        build_text_payload,
+        truncate_utf8,
+        validate_webhook_url,
+    )
+
+    print("=" * 62)
+    print("FEISHU WEBHOOK CHANNEL TESTS  (Phase 3)")
+    print("=" * 62)
+    failures = 0
+
+    def check(name: str, ok: bool, extra: str = "") -> None:
+        nonlocal failures
+        print(f"  {name:<44} {'PASS' if ok else 'FAIL'}  {extra}")
+        failures += 0 if ok else 1
+
+    # ---- 1) webhook URL validation ----------------------------------------
+    print("\n-- 1) webhook URL validation --")
+    good = FEISHU_WEBHOOK_PREFIX + "abc123token"
+    check("valid webhook accepted", validate_webhook_url(good) is True)
+    check("empty rejected", validate_webhook_url("") is False)
+    check("None rejected", validate_webhook_url(None) is False)
+    check("http scheme rejected", validate_webhook_url(good.replace("https://", "http://")) is False)
+    check("foreign host rejected",
+          validate_webhook_url("https://example.com/open-apis/bot/v2/hook/x") is False)
+    check("missing path rejected", validate_webhook_url("https://open.feishu.cn/") is False)
+
+    # ---- 2) payload construction -------------------------------------------
+    print("\n-- 2) payload construction --")
+    payload = build_text_payload("🚨 标题", "第一行\n第二行")
+    check("msg_type=text", payload.get("msg_type") == "text", str(payload.get("msg_type")))
+    text = payload["content"]["text"]
+    check("title embedded", "🚨 标题" in text)
+    check("content embedded", "第一行\n第二行" in text)
+
+    # ---- 3) UTF-8 byte truncation ------------------------------------------
+    print("\n-- 3) UTF-8 truncation (4096-byte limit) --")
+    short = "short message"
+    check("short kept intact", truncate_utf8(short) == short)
+    long_text = "空投提醒" * 3000  # 4 chars x 3 bytes -> ~12000 bytes
+    cut = truncate_utf8(long_text)
+    check("long truncated", len(cut) < len(long_text))
+    check("fits byte limit", len(cut.encode("utf-8")) <= 4000,
+          f"bytes={len(cut.encode('utf-8'))}")
+    # a half-cut multibyte char would be dropped by re-decoding, breaking equality
+    check("no broken multibyte char", cut.encode("utf-8").decode("utf-8") == cut,
+          f"tail={cut[-3:]!r}")
+    sweep_ok = all(
+        truncate_utf8(long_text, k).encode("utf-8").decode("utf-8") == truncate_utf8(long_text, k)
+        for k in range(1, 200, 7)
+    )
+    check("sweep byte limits, no half char", sweep_ok)
+
+    # ---- 4) FanoutProvider behaviour (fake channels, no network) -----------
+    print("\n-- 4) multi-channel fan-out --")
+
+    class _Fake(nb.NotificationProvider):
+        def __init__(self, name: str, ok: bool, dry: bool = False):
+            self.name = name
+            self._ok = ok
+            self.dry_run = dry
+
+        def send(self, title, content, url=None):
+            return (True, None) if self._ok else (False, f"{self.name} boom")
+
+    both_ok = nb.FanoutProvider([_Fake("a", True), _Fake("b", True)])
+    ok, err = both_ok.send("t", "c")
+    check("all channels ok -> ok", ok, f"err={err}")
+
+    partial = nb.FanoutProvider([_Fake("a", True), _Fake("b", False)])
+    ok, err = partial.send("t", "c")
+    check("one channel fails -> still ok", ok)
+    check("failure reported in log only", err is None)
+
+    all_fail = nb.FanoutProvider([_Fake("a", False), _Fake("b", False)])
+    ok, err = all_fail.send("t", "c")
+    check("all channels fail -> not ok", ok is False)
+    check("errors joined", "boom" in (err or ""), f"err={err}")
+
+    # ---- 5) provider selection ---------------------------------------------
+    print("\n-- 5) provider selection (force_dry_run / no config) --")
+    nb.reset_provider()
+    saved_force = nb.force_dry_run
+    try:
+        nb.force_dry_run = True
+        prov = nb.get_provider()
+        check("force_dry_run -> DryRunProvider", isinstance(prov, nb.DryRunProvider))
+    finally:
+        nb.force_dry_run = saved_force
+        nb.reset_provider()
 
     print(f"\nRESULT: {'ALL PASS' if failures == 0 else f'{failures} FAILURE(S)'}")
     return 0 if failures == 0 else 1
