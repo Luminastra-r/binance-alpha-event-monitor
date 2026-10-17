@@ -1,0 +1,56 @@
+# Binance Alpha Monitor — official announcements channel fixture (supplementary)
+# ============================================================================
+# Source : Binance official English announcements Telegram channel
+#          https://t.me/s/binance_announcements
+# Fetched: live capture via platform fetch tool (Phase 2), transcribed to
+#          fixture format; content faithful to the captured posts.
+# Usage  : TELEGRAM_ANNOUNCEMENTS_FIXTURE=tests/fixtures/binance_announcements.txt
+#          python -m app replay DNA --sources telegram_wallet telegram_announcements
+# Purpose: P1 supplementary source. Alpha Trading Competitions, Starter
+#          Carnival, Earn and other activities must NOT be matched as Alpha
+#          airdrops (they are negative cases for the keyword matcher).
+# Format : ---MSG / ts=<ISO UTC> / <message text>
+
+---MSG
+ts=2026-09-24T10:00:00Z
+Binance Alpha Trading Competition: Trade ChainOpera AI (COAI) and Share $200K Worth of Rewards (2026-09-24)
+
+Binance Wallet is excited to launch the COAI Trading Competition on Binance Alpha!
+
+During the Promotion Periods, trade ChainOpera AI (COAI) in your Binance Wallet (Keyless) or via Binance Alpha to receive exclusive token rewards.
+
+Any user who is eligible to trade Binance Alpha tokens is eligible to participate in this trading competition.
+
+---MSG
+ts=2026-09-29T10:00:00Z
+Binance Alpha Trading Competition: Trade Doppler Finance (XDP) and Share $200K Worth of Rewards (2026-09-29)
+
+Binance Wallet is excited to launch the XDP Trading Competition on Binance Alpha!
+
+During the Promotion Periods, trade Doppler Finance (XDP) in your Binance Wallet (Keyless) or via Binance Alpha to receive exclusive token rewards.
+
+---MSG
+ts=2026-09-30T10:00:00Z
+Binance Alpha Trading Competition: Trade o1.exchange (O) and Share $200K Worth of Rewards (2026-09-30)
+
+Binance Wallet is excited to launch the O Trading Competition on Binance Alpha!
+
+During the Promotion Periods, trade o1.exchange (O) in your Binance Wallet (Keyless) or via Binance Alpha to receive exclusive token rewards.
+
+---MSG
+ts=2026-10-06T09:00:00Z
+The Binance Starter Carnival: Complete Tasks to Share $100,000 Worth of Rewards in BTC
+
+The Binance Starter Carnival new edition is now on! Eligible users can complete new user deposit and trading tasks to get a share of a BTC token voucher reward pool valued at $100,000.
+
+---MSG
+ts=2026-10-08T08:30:00Z
+Binance Earn: Enjoy Up to 7% APR with USDT Flexible Products
+
+Binance Earn is excited to renew the campaign for the USDT Simple Earn Flexible Products.
+
+---MSG
+ts=2026-10-10T08:00:00Z
+Binance Will Support the SpaceX (SPCXB) Airdrop for MarsCoin (MARSCOIN) Holders and the Invesco QQQ Trust (QQQB) Airdrop for 牛来 (牛来) Holders
+
+Distribution of the airdrop tokens will take place on a 1:1 basis. Please note that further announcements will be made on the Binance announcement channel in due course.
