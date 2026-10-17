@@ -95,12 +95,18 @@ class Config:
     # how long after start_time an airdrop is considered over (then poll = idle)
     AIRDROP_WINDOW_HOURS = _env_int("AIRDROP_WINDOW_HOURS", 2)
 
-    # --- PushPlus ------------------------------------------------------------
+    # --- PushPlus (WeChat) ----------------------------------------------------
     PUSHPLUS_ENABLED = _env_bool("PUSHPLUS_ENABLED", False)
     PUSHPLUS_TOKEN = os.getenv("PUSHPLUS_TOKEN", "").strip()
     PUSHPLUS_API_URL = os.getenv("PUSHPLUS_API_URL", "https://www.pushplus.plus/send")
     # retry delays in seconds: attempt at t=0, t=30, t=150  (3 attempts max)
     PUSHPLUS_RETRY_DELAYS = [0, 30, 120]
+
+    # --- Feishu (Lark) custom bot webhook (Phase 3) ---------------------------
+    FEISHU_ENABLED = _env_bool("FEISHU_ENABLED", False)
+    FEISHU_WEBHOOK_URL = os.getenv("FEISHU_WEBHOOK_URL", "").strip()
+    FEISHU_RETRY_DELAYS = [0, 30, 120]
+    FEISHU_TIMEOUT = _env_int("FEISHU_TIMEOUT", 15)
 
     # --- storage / health ----------------------------------------------------
     DB_PATH = os.getenv("DB_PATH", str(BASE_DIR / "data" / "monitor.db"))
@@ -110,5 +116,11 @@ class Config:
     HEALTH_FETCH_ERROR_MINUTES = _env_int("HEALTH_FETCH_ERROR_MINUTES", 30)
     MAX_CONSECUTIVE_FETCH_ERRORS = _env_int("MAX_CONSECUTIVE_FETCH_ERRORS", 10)
 
-    # plain class attribute (NOT a property): true only when a token exists
+    # plain class attributes (NOT properties): true only when a channel is
+    # enabled AND its credential/URL is present (and valid for Feishu)
     pushplus_ready = PUSHPLUS_ENABLED and bool(PUSHPLUS_TOKEN)
+    feishu_ready = (
+        FEISHU_ENABLED
+        and bool(FEISHU_WEBHOOK_URL)
+        and FEISHU_WEBHOOK_URL.startswith("https://open.feishu.cn/open-apis/bot/v2/hook/")
+    )
