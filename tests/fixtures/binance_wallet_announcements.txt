@@ -1,0 +1,216 @@
+# Binance Alpha Monitor — official channel fixture
+# ============================================================================
+# Source : Binance Wallet official Telegram channel (public web preview)
+#          https://t.me/s/binance_wallet_announcements
+# Fetched: via platform fetch tool (sandbox has no direct egress to t.me)
+# Times  : rendered by t.me web preview in Asia/Shanghai, converted to UTC below
+# Usage  : TELEGRAM_FIXTURE=tests/fixtures/binance_wallet_announcements.txt
+#          python -m app replay DNA
+# Format : ---MSG / ts=<ISO UTC> / <verbatim message text>
+
+---MSG
+ts=2026-10-14T07:23:00Z
+Play-Ins start soon, C9 or Karmine Corp? FURIA or MVK? 🔥
+
+Make your picks in S16: Legends Assemble!
+
+Gather your squad, build prediction streaks and compete for an iPhone 18 Pro Max — plus a share of the 150,000 USDT team prize pool.
+
+👉 Join here: https://web3.binance.com/activity/lol-worlds?utm_source=xpost&utm_medium=bnwallet
+
+---MSG
+ts=2026-10-14T07:24:00Z
+The top 100 eligible users on the Oct 13–19 individual leaderboard earn rewards.
+
+• First place: iPhone 18 Pro Max (512GB), worth approximately 2,000 USDT.
+• Second: Steam Wallet Credit worth approximately 300 USDT.
+• Third: GTA VI Ultimate Edition, valued at approximately 100 USDT.
+• Ranks 4–100 receive fixed USDT or voucher rewards totaling 2,600 USDT.
+
+Bring your squad before kickoff. Five activated members unlock a +100% bonus on Match Points.
+
+Correct-prediction streaks build from 2 to 4, 8, 16 and up to 32 Match Points per match before that bonus. Your squad can also compete for a share of the 150,000 USDT team prize pool.
+
+---MSG
+ts=2026-10-14T08:01:00Z
+Please get ready to claim the Binance Alpha airdrop and trade today at 10:00 (UTC).
+
+Users with at least 245 Binance Alpha Points can claim the token on a first-come, first-served basis until the airdrop pool is fully distributed or the airdrop event expires. Further details will be announced soon.
+
+Please stay tuned to Binance's official channels for the specific airdrop tokens and the latest updates.
+
+---MSG
+ts=2026-10-14T09:11:00Z
+⚽ The European Football League continues!
+
+Manchester City vs. Paris Saint-Germain Prediction Market is now live.
+
+The back-to-back holders come to the Etihad. Can City stop them?
+
+Follow the match, support your team, and trade your view!
+
+---MSG
+ts=2026-10-14T10:00:00Z
+Derive (DRV) is now live on Binance Alpha!
+
+Users with at least 245 Binance Alpha Points can claim an airdrop of 70 DRV tokens on a first-come, first-served basis. If the reward pool is not fully distributed, the score threshold will automatically decrease by 5 points every 5 minutes.
+
+Please note that claiming the airdrop will consume 15 Binance Alpha Points. Users must confirm their claim on the Alpha Events page within 24 hours; otherwise, it will be deemed that users have given up claiming the airdrop.
+
+---MSG
+ts=2026-10-14T10:31:00Z
+Maximize Your Returns with Binance Wallet TRON Carnival Season 3!
+
+Subscribe to JustLend DAO promoted pools on on TRON DAO, JUST DAO, SUN.io and USDD via #BinanceWallet DeFi to unlock attractive APRs up to 27.7%!
+
+*Real-time APR is subject
+
+Subscribe now 👇 (Open in mobile browser)
+
+---MSG
+ts=2026-10-14T11:04:00Z
+Join the #Binance Alpha DGAI Trading Competition now!
+
+🔸 Trade DGAI with $200K worth of rewards up for grabs.
+🔸 Click [Join] on the Binance App event page to start tracking trade volume.
+🔸 New: Rising Trader Boost — Qualified Alpha competition traders can unlock a 1.2x trading volume boost. See campaign details to check your eligibility.
+🔸 Early Bird Multiplier is on — the earlier you trade, the higher the boost. Day 1 trades enjoy a 2.0x multiplier.
+🔸 Only buy volume counts (selling is excluded).
+
+Don't miss out 👇
+
+---MSG
+ts=2026-10-14T12:01:00Z
+🏀 Two matchups. Four teams. Who comes out on top?
+
+The Suns face the Spurs, while the Nuggets take on the Clippers.
+
+Can San Antonio stop Phoenix? Will Denver take the win, or will LA have the last word?
+
+Make your picks on Binance Wallet Prediction Markets.
+
+---MSG
+ts=2026-10-15T03:54:00Z
+🔥 TSMC Earnings Week Is Here!
+
+Taiwan Semiconductor reports Q3 earnings this Thursday. Will strong AI chip demand deliver another earnings beat?
+
+Earnings season could mean opportunity. TSMC tokenized securities available for trading on #BinanceWallet. 📈
+
+---MSG
+ts=2026-10-15T06:06:00Z
+Turn on match alerts 🔔
+
+Track Worlds S16 on Binance Wallet's Matches Tab.
+
+Follow your teams and set match alerts to stay ready before kickoff.
+
+Team up, build prediction streaks and compete for rewards.
+
+👉 Join here: https://web3.binance.com/activity/lol-worlds?utm_source=xpost&utm_medium=bnwallet
+
+---MSG
+ts=2026-10-15T11:30:00Z
+Binance Alpha will be the first platform to feature NeoSoul (DNA) on October 16.
+
+Eligible users can claim their airdrop using Binance Alpha Points on the Alpha Events page once trading opens. Further details will be announced soon.
+
+Please stay tuned to Binance's official channels for the latest updates.
+
+---MSG
+ts=2026-10-15T12:04:00Z
+🏀 Two games. Four teams. Who are you backing?
+
+Can the Knicks get past the Raptors? Will the Rockets take the win, or will the Thunder have the final say?
+
+Both markets are now live on Binance Wallet Prediction Markets.
+
+---MSG
+ts=2026-10-16T06:01:00Z
+🏀 The CBA is back! New season, new predictions.
+
+The Shanghai Sharks take on the Shenzhen Leopards in the season opener. Who starts the season with a win?
+
+The market is now live on Binance Wallet Prediction Markets.
+
+---MSG
+ts=2026-10-16T06:04:00Z
+Binance Alpha is the first platform to feature NeoSoul (DNA), with Alpha debut and trading starting on October 16, 2026, at 08:00 (UTC).
+
+Users with at least 245 Binance Alpha Points can claim an airdrop of 400 DNA tokens on a first-come, first-served basis. If the reward pool is not fully distributed, the score threshold will automatically decrease by 5 points every 5 minutes.
+
+Please note that claiming the airdrop will consume 15 Binance Alpha Points. Users must confirm their claim on the Alpha Events page within 24 hours; otherwise, it will be deemed that users have given up claiming the airdrop.
+
+---MSG
+ts=2026-10-16T07:16:00Z
+🏆 S16 Play-In Day 2 is here!
+
+🔥 Karmine Corp vs. MVK
+🔥 C9 vs. FUR
+
+The markets favor Karmine Corp and C9. Do you agree, or is an upset on the cards?
+
+Make your picks on Binance Wallet Prediction Markets and join S16: Legends Assemble for a chance to win prizes👇
+
+---MSG
+ts=2026-10-16T08:08:00Z
+🚀 Introducing DeFi API!
+
+Building DeFi into your app just got easier.
+
+Powered by Web3 API infrastructure, the new DeFi API enables developers to integrate DeFi capabilities without building individual protocol integrations from scratch.
+
+🔸 10 EVM chains: Including BSC, Ethereum, Base, and Robinhood Chain
+🔸 Multiple DeFi protocols: Including Aave, Morpho, Uniswap, and more
+🔸 bStocks liquidity pools: Build transactions to add liquidity to supported bStocks LPs
+🔸 One API: Discover DeFi products, track positions, access protocol insights, and build transactions
+
+Less complexity. More ways to build with DeFi.
+
+Coming soon: Solana support!
+
+Start building 👇
+
+---MSG
+ts=2026-10-16T09:39:00Z
+Exploring Web3 with friends? The Binance Wallet Referral Programme lets you share your experience with people you know.
+
+🔗 Get your referral link in the app
+📊 Track referral activity in your programme dashboard
+📘 Rewards, rates and eligibility are set out in the programme terms — please read the full terms before taking part
+
+Whether you're an active on-chain trader or building your own trading community, invite your friends to explore the Web3 world together.
+
+Explore more here: https://web3.binance.com/en/referral?&utm_campaign=referralgtm&utm_medium=x&utm_source=walletx
+
+---MSG
+ts=2026-10-16T10:14:00Z
+🏀 12 games. One final day of preseason. A feast for basketball fans!
+
+From Pistons vs. Raptors to Lakers vs. Nuggets, there's no shortage of action.
+
+Who closes out preseason with a win and heads into the regular season on a high?
+
+Make your picks on Binance Wallet Prediction Markets.
+
+---MSG
+ts=2026-10-16T11:09:00Z
+Join the #Binance Alpha ACU Trading Competition now!
+
+🔸 Trade ACU with $100K worth of rewards up for grabs.
+🔸 Click [Join] on the Binance App event page to start tracking trade volume.
+🔸 New: Rising Trader Boost — Qualified Alpha competition traders can unlock a 1.2x trading volume boost. See campaign details to check your eligibility.
+🔸 Early Bird Multiplier is on — the earlier you trade, the higher the boost. Day 1 trades enjoy a 3.0x multiplier.
+🔸 Only buy volume counts (selling is excluded).
+
+Don't miss out 👇
+
+---MSG
+ts=2026-10-16T11:39:00Z
+⚽ Two sides level on points. One has to blink.
+
+Everton vs. Chelsea Prediction Market is now live.
+
+Everton are unbeaten at home. Chelsea arrive in form. Who breaks first?
+
+Follow the match, support your team, and trade your view!
