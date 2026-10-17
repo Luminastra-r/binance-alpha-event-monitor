@@ -1,0 +1,20 @@
+services:
+  binance-alpha-monitor:
+    build: .
+    container_name: binance-alpha-monitor
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      # SQLite messages/events/notifications/T-10 reminders survive restarts
+      - ./data:/app/data
+    # resource guard for a 1C/1GB box
+    mem_limit: 256m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
